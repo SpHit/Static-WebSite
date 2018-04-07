@@ -1,0 +1,25 @@
+{{ $action := .Get "action" | default "thank-you" -}}
+{{- $antispam := .Get "antispam" | default "recaptcha" -}}
+{{- if ne $action "thank-you" -}}{{- $action := ($action | absLangURL) -}}{{- end -}}
+<form class="form-container" {{ if eq $antispam "honeypot" }}netlify-honeypot="antispambot"{{ end }} name="{{ .Get "name" }}" action="{{ $action }}" netlify>
+  {{ if eq $antispam "honeypot" }}<input type="text" name="antispambot" class="hide" />{{ end }}
+  {{ .Inner }}
+  {{ if eq $antispam "recaptcha" }}
+  <div class="row">
+    <div class="row-item small-full small-text-center medium-third medium-text-right">
+      <label >reCaptcha</label>
+    </div>
+    <div class="row-item small-full small-text-center medium-two-thirds medium-text-left">
+      <div netlify-recaptcha></div>
+    </div>
+  </div>
+  {{ end }}
+  <div class="row">
+    <button class="row-item small-full medium-third large-quarter left button" type="reset">
+      Reset
+    </button>
+    <button class="row-item small-full medium-third large-quarter right button" type="submit">
+      Submit
+    </button>
+  </div>
+</form>

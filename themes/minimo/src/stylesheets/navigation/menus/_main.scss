@@ -1,0 +1,28 @@
+.main-menu {
+  & > div {
+    display: flex;
+    align-items: center;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+  }
+
+  li {
+    display: inline-block;
+    text-transform: uppercase;
+    margin-right: 0.625em;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &.current {
+      a {
+        font-weight: 700;
+        pointer-events: none;
+      }
+    }
+  }
+}

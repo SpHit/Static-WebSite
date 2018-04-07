@@ -1,0 +1,34 @@
+{{ if .Site.GoogleAnalytics }}
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id="{{ .Site.GoogleAnalytics }}></script>
+<script>
+  console.log("Google Analytics initialized.");
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', {{ .Site.GoogleAnalytics }});
+</script>
+{{ end }}
+
+{{ if eq .Type .Site.Params.contentType }}
+  <!-- Page Author & Description -->
+  <meta name="author" content="{{ if isset .Params "author" }}{{ .Params.author }}{{ else }}{{ .Site.Params.author }}{{ end }}" />
+  <meta name="description" content="{{ .Summary | plainify }}" />
+{{ else }}
+  <!-- Site Author & Description -->
+  <meta name="author" content="{{ .Site.Params.author }}" />
+  <meta name="description" content="{{ .Site.Params.description }}" />
+{{ end }}
+
+<!-- Site Generator -->
+<meta name="generator" content="Hugo {{ .Hugo.Version }}" />
+
+<!--Setting Favicon-->
+<link rel="shortcut icon" href="{{ $.Site.BaseURL }}{{ .Site.Params.favicon }}">
+
+<!-- Permalink & RSSlink -->
+<link rel="canonical" href="{{ .Permalink }}" />
+<link rel="alternative" href="{{ "/index.xml" | relURL }}" title="{{ .Site.Title }}" type="application/atom+xml" />
+
+<link href="https://cdn.bootcss.com/semantic-ui/2.2.14/semantic.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="/css/site.css" />

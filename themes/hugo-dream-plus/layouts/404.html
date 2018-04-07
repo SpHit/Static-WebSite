@@ -1,0 +1,23 @@
+{{ define "title" }}
+Page Not Found
+{{ end }}
+
+{{ define "frontmenu" }}
+{{ partial "nav.html" . }}
+{{ end }}
+
+{{ define "main" }}
+<div class="ui centered grid about">
+  <div class="fifteen wide mobile fifteen wide tablet fifteen wide computer column">
+<section class="ui stacked segments">
+	<header class="ui inverted segment">
+		<h2 class="ui header"><center>{{- .Site.Params.error404 -}}</center></h2>
+        </header>
+	<article id = "twemoji" class="ui inverted segment">        	
+        	{{ readFile "/content/404.md" | markdownify | emojify }}        
+                <p><center><a class="ui blue label" href="/">{{ i18n "returnHome" }}</a></center></p>	 
+	</article>        
+</section>
+</div>
+</div>
+{{ end }}

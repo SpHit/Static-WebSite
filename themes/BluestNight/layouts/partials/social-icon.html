@@ -1,0 +1,6 @@
+<a href="{{ replace .URL "%USER%" .User }}" class="row-item" {{ .Attrs | safeHTMLAttr }} title="{{ .Title }}" aria-title="{{ replace (replace .ReaderText "%TITLE%" .Title) "%PRONOUN%" .Pronoun }}">
+    <span class="fa-stack fa-xs">
+        <span class="fas fa-{{ .Style }} fa-stack-2x"></span>
+        <span class="{{ .Icon }} fa-stack-1x fa-inverse"></span>
+    </span>
+</a>

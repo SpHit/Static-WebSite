@@ -1,0 +1,23 @@
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+{{ with .Site.Params.description }}<meta name="description" content="{{ . }}" />{{ end }}
+{{ with .Site.Params.name }}<meta name="author" content="{{ . }}" />{{ end }}
+
+<title>{{ .Site.Title }}</title>
+
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="assets/css/font-awesome.min.css">
+
+<!-- Custom styles for this template -->
+<link rel="stylesheet" href="assets/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Oswald:400,300,700|EB+Garamond">
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+{{ "<!--[if lt IE 9]><script src=\"assets/js/html5shiv.js\"></script><script src=\"assets/js/respond.min.js\"></script><![endif]-->" | safeHTML }}
+
+{{ if and (.Site.GoogleAnalytics) (not (in (printf "%#v" .Site.BaseURL) "localhost")) }}
+  {{ template "_internal/google_analytics.html" . }}
+{{ end }}

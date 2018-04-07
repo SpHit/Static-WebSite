@@ -1,0 +1,1 @@
+{{- . | replaceRE "(?m)(;\\s+)" ";" | replaceRE "(?m)(\\s*{\\s*)" "{" | replaceRE "(?m)(\\s*}\\s*)" "}" | replaceRE "(?m)(\\s*:\\s*)" ":" | replaceRE "(?m)(\\s*,\\s*)" "," | replaceRE "\\/\\*[^*]*\\*+([^/*][^*]*\\*+)*\\/" "" | replaceRE "(?m)(\\s+)" " " -}}

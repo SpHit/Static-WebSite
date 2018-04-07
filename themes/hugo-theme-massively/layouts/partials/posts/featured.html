@@ -1,0 +1,18 @@
+<!-- Featured Post -->
+{{ range .firstpost }}
+<article class="post featured">
+    <header class="major">
+        {{ if .Date }}
+        <span class="date">{{ .Date.Format "January 2, 2006" }}</span>
+        {{ end }}
+        <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+        <p>{{ .Description }}</p>
+    </header>
+    {{ if .Params.image }}
+    <a href="{{ .Permalink }}" class="image main"><img src="{{ .Params.image | absURL }}" alt="" /></a>
+    {{ end }}
+    <ul class="actions">
+        <li><a href="{{ .Permalink }}" class="button big">{{ .Site.Data.post.linktext }}</a></li>
+    </ul>
+</article>
+{{ end }}

@@ -1,0 +1,21 @@
+# theme.toml template for a Hugo theme
+# See https://github.com/gohugoio/hugoThemes#themetoml for an example
+
+name = "SMPL"
+license = "Creative Commons Attribution 3.0 Unported"
+licenselink = "//github.com/christianmendoza/hugo-smpl-theme/blob/master/LICENSE.md"
+description = "A really simple theme to share your contact information and social links."
+homepage = "//github.com/christianmendoza/hugo-smpl-theme"
+tags = ["minimal", "onepage", "one page", "responsive", "personal"]
+features = []
+min_version = "0.21"
+
+[author]
+  name = "Christian Mendoza"
+  homepage = "//iamchristian.me"
+
+# If porting an existing theme
+[original]
+  name = "Black Tie"
+  homepage = "http://blacktie.co/2013/12/smpl-a-simple-contact-page/"
+  repo = ""

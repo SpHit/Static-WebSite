@@ -1,0 +1,14 @@
+<style>
+    {{- partial "css/parse_config.css" . -}}
+    {{- .Scratch.Set "css" (partial "css/inline/reset.css" .Scratch) -}}
+    {{- .Scratch.Add "css" (partial "css/inline/base_classes.css" .Scratch) -}}
+    {{- .Scratch.Add "css" (partial "css/inline/screen_size.css" .Scratch) -}}
+    {{- .Scratch.Add "css" (partial "css/inline/page.css" .Scratch) -}}
+    {{- .Scratch.Add "css" (partial "css/inline/navigation.css" .Scratch) -}}
+    {{- .Scratch.Add "css" (partial "css/inline/widgets.css" .Scratch) -}}
+    {{- if $.Site.Params.no_minimize -}}
+        {{- .Scratch.Get "css" | safeCSS -}}
+    {{- else -}}
+        {{- partial "css/minify.css" (.Scratch.Get "css") | safeCSS -}}
+    {{- end -}}
+</style>

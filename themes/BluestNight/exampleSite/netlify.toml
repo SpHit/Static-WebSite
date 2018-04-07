@@ -1,0 +1,35 @@
+# Global settings applied to the whole site.
+[build]
+  # Repo gets cloned to /opt/build/repo
+  # $base gets appended to the end and screws up the path
+  #base    = "shadow53.com"
+  publish = "public"
+  command = "if [ -d themes ]; then rm -r themes; fi && git clone https://gitlab.com/BluestNight/BluestNight.git themes/BluestNight && hugo"
+  [build.environment]
+    HUGO_VERSION = "0.31"
+
+# Production context: All deploys to the main
+# repository branch will inherit these settings.
+[context.production]
+  command = "if [ -d themes ]; then rm -r themes; fi && git clone https://gitlab.com/BluestNight/BluestNight.git themes/BluestNight && hugo"
+  #[context.production.environment]
+  #  ACCESS_TOKEN = "super secret"
+
+# Deploy Preview context: All Deploy Previews
+# will inherit these settings.
+#[context.deploy-preview.environment]
+#  ACCESS_TOKEN = "not so secret"
+
+# Branch Deploy context: All deploys that are not in
+# an active Deploy Preview will inherit these settings.
+[context.branch-deploy]
+  command = "if [ -d themes ]; then rm -r themes; fi && git clone https://gitlab.com/BluestNight/BluestNight.git themes/BluestNight && hugo -b $DEPLOY_PRIME_URL --buildDrafts"
+
+# Specific branch context: Deploys from this branch
+# will take these settings and override their
+# current ones.
+#[context.feature]
+#  command = "make feature"
+
+#[context."features/branch"]
+#  command = "gulp"

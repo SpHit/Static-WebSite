@@ -1,0 +1,45 @@
+#post-list article {
+  border-bottom: 1px solid {{ .Get "body_text" }};
+}
+
+#post-list .media-object-section {
+  padding: 0;
+}
+
+#post-list article h4 {
+  font-weight: bold;
+}
+
+/* Site main - pagination */
+
+.paginate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.paginate .button {
+  width: 100%;
+  max-width: 100%;
+}
+
+.paginate .pagination-previous {
+  align-self: flex-start;
+  white-space: nowrap;
+}
+
+.paginate .pagination-next {
+  align-self: flex-end;
+  white-space: nowrap;
+}
+
+.paginate .pagination-page-number {
+  align-self: center;
+  text-align: center;
+  flex-shrink: 2;
+  font-weight: bold;
+}
+
+.metadata {
+  line-height: 1.5;
+}

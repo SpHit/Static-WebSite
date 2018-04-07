@@ -1,0 +1,18 @@
+name = "edyo"
+license = "MIT"
+licenselink = "https://github.com/edyo/hugo-theme-edyo/blob/master/LICENSE.md"
+description = "Based in Bleak theme"
+homepage = "http://www.entredevyops.es/"
+tags = ["ghost", "minimal"]
+features = ["", ""]
+min_version = 0.15
+
+[author]
+  name = "Eduardo Bellido Bellido"
+  homepage = "http://edubxb.net"
+
+# If porting an existing theme
+[original]
+  name = "Peter Amende"
+  homepage = "https://github.com/zutrinken"
+  repo = "https://github.com/zutrinken/bleak"

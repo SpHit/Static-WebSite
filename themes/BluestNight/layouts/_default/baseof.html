@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{- .Title -}}</title>
+
+    <!-- Prematurely connect to the servers to save some milliseconds -->
+    <!-- <link rel="preload"> is only in recent browser versions, so we keep "dns-prefetch" and "preconnect" -->
+    <!-- <link rel="prefetch" is loads content the user may request *after* the page loads -->
+    <link rel="preload" href="{{ "styles.css" | absLangURL }}" as="style" />
+
+    <link rel="dns-prefetch" href="https://use.fontawesome.com/" />
+    <link rel="preconnect" href="https://use.fontawesome.com/" />
+    {{ partial "async/css.html" (dict "URL" "https://use.fontawesome.com/releases/v5.0.8/css/solid.css" "Integrity" "sha384-v2Tw72dyUXeU3y4aM2Y0tBJQkGfplr39mxZqlTBDUZAb9BGoC40+rdFCG0m10lXk" "CrossOrigin" "anonymous") }}
+    {{ partial "async/css.html" (dict "URL" "https://use.fontawesome.com/releases/v5.0.8/css/regular.css" "Integrity" "sha384-A/oR8MwZKeyJS+Y0tLZ16QIyje/AmPduwrvjeH6NLiLsp4cdE4uRJl8zobWXBm4u" "CrossOrigin" "anonymous") }}
+    {{ partial "async/css.html" (dict "URL" "https://use.fontawesome.com/releases/v5.0.8/css/brands.css" "Integrity" "sha384-IiIL1/ODJBRTrDTFk/pW8j0DUI5/z9m1KYsTm/RjZTNV8RHLGZXkUDwgRRbbQ+Jh" "CrossOrigin" "anonymous") }}
+    {{ partial "async/css.html" (dict "URL" "https://use.fontawesome.com/releases/v5.0.8/css/fontawesome.css" "Integrity" "sha384-q3jl8XQu1OpdLgGFvNRnPdj5VIlCvgsDQTQB6owSOHWlAurxul7f+JpUOVdAiJ5P" "CrossOrigin" "anonymous") }}
+
+    {{ if (in (string .Content) "class=\"katex-container\"") }}
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com/" />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com/" />
+
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.js" as="script" />
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/contrib/auto-render.min.js" as="script" />
+    {{ partial "async/css.html" (dict "URL" "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css") }}
+    {{ end }}
+
+    {{- if $.Site.Params.matomo -}}
+      {{- if $.Site.Params.matomo.host -}}
+        {{- .Scratch.Set "matomo_host" $.Site.Params.matomo.host -}}
+      {{- end -}}
+      {{- if $.Site.Params.matomo.enable -}}
+        {{- .Scratch.Set "matomo_enable" $.Site.Params.matomo.enable -}}
+      {{- end -}}
+      {{- if $.Site.Params.matomo.track_nojs -}}
+        {{- .Scratch.Set "matomo_track_nojs" $.Site.Params.matomo.track_nojs -}}
+      {{- end -}}
+      {{- if $.Site.Params.matomo.enable_optout -}}
+        {{- .Scratch.Set "matomo_enable_optout" $.Site.Params.matomo.enable_optout -}}
+      {{- end -}}
+      {{- if $.Site.Params.matomo.enable_ajax -}}
+        {{- .Scratch.Set "matomo_enable_ajax" $.Site.Params.matomo.enable_ajax -}}
+      {{- end -}}
+      {{- if $.Site.Params.matomo.site_id -}}
+        {{- .Scratch.Set "matomo_site_id" $.Site.Params.matomo.site_id -}}
+      {{- else -}}
+        {{- .Scratch.Set "matomo_site_id" 1 -}}
+      {{- end -}}
+    {{- else if $.Site.Params.piwik -}}
+      {{- if $.Site.Params.piwik.host -}}
+        {{- .Scratch.Set "matomo_host" $.Site.Params.piwik.host -}}
+      {{- end -}}
+      {{- if $.Site.Params.piwik.enable -}}
+        {{- .Scratch.Set "matomo_enable" $.Site.Params.piwik.enable -}}
+      {{- end -}}
+      {{- if $.Site.Params.piwik.track_nojs -}}
+        {{- .Scratch.Set "matomo_track_nojs" $.Site.Params.piwik.track_nojs -}}
+      {{- end -}}
+      {{- if $.Site.Params.piwik.enable_optout -}}
+        {{- .Scratch.Set "matomo_enable_optout" $.Site.Params.piwik.enable_optout -}}
+      {{- end -}}
+      {{- if $.Site.Params.piwik.enable_ajax -}}
+        {{- .Scratch.Set "matomo_enable_ajax" $.Site.Params.piwik.enable_ajax -}}
+      {{- end -}}
+      {{- if $.Site.Params.piwik.site_id -}}
+        {{- .Scratch.Set "matomo_site_id" $.Site.Params.piwik.site_id -}}
+      {{- else -}}
+        {{- .Scratch.Set "matomo_site_id" 1 -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{ if and (.Scratch.Get "matomo_enable") (.Scratch.Get "matomo_host") -}}
+    <link rel="dns-prefetch" href="{{ .Scratch.Get "matomo_host" }}" />
+    <link rel="preconnect" href="{{ .Scratch.Get "matomo_host" }}" />
+    {{- end -}}
+
+    {{- if and $.Site.Params.widgets $.Site.Params.widgets.search -}}
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com/" />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com/" />
+    <!-- Cache the scripts and JSON index -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.3/lunr.min.js" as="script" />
+    <link rel="preload" href="{{ "js/search.min.js" | absLangURL }}" as="script" />
+    <link rel="preload" href="{{ "index.json" | absLangURL }}" as="fetch" />
+    {{ end -}}
+
+    {{- if $.Site.Params.iubenda.enable_cookie_policy -}}
+    <link rel="preload" href="https://cdn.iubenda.com/cookie_solution/iubenda_cs/core-6f17ecca6b9b620e0bbb837c5c1409ab.js" as="script" />
+    {{- end -}}
+
+    {{- $.Scratch.Set "desc" "" -}}
+    {{- with $.Site.Params.description -}}{{- $.Scratch.Set "desc" . -}}{{- end -}}
+    {{- with .Summary -}}{{- $.Scratch.Set "desc" . -}}{{- end -}}
+    {{- with $.Params.description -}}{{- $.Scratch.Set "desc" . -}}{{- end -}}
+    {{- if (not (eq ($.Scratch.Get "desc") "")) -}}
+    <meta name="description" itemprop="description" content="{{ replace ($.Scratch.Get "desc") "\n" " " }}" id="desc">
+    {{- end -}}
+
+    {{ .Hugo.Generator }}
+
+    {{- if .RSSLink -}}<link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }} Feed" href="{{ .RSSLink }}">{{ end }}
+
+    {{- if .Params.tags -}}
+      <meta name="keywords" itemprop="keywords" content="{{ delimit .Params.tags "," }}" id="keywords">
+    {{- end -}}
+
+    <link rel="canonical" href="{{ .URL | absURL }}">
+
+    {{ if $.Site.Params.hashover }}
+    {{ partial "async/css.html" (dict "URL" "hashover/comments.css" "Integrity" "sha384-Ef/dA/KgOCpRpXdcwlTPVy3C83rE6PlHVZqLyDYDPnegQm7qtWkEG5aTRGGaizd6") }}
+    {{ end }}
+
+    {{- .Scratch.Set "sitevar" $.Site -}}
+    {{- partial "css/color/parse_color.css" .Scratch -}}
+    {{- .Scratch.Set "label" "alt_bg" -}}
+    {{- partial "css/color/detect_light_or_dark.css" .Scratch -}}
+    {{- if ($.Scratch.Get "alt_bg_is_dark") -}}
+      {{- .Scratch.Set "code_css" (add (add "css/dark" (cond ($.Site.Params.no_minimize | default false) "" ".min")) ".css") }}
+    {{- else -}}
+      {{- .Scratch.Set "code_css" (add (add "css/light" (cond ($.Site.Params.no_minimize | default false) "" ".min")) ".css") }}
+    {{- end -}}
+    {{ partial "async/css.html" (dict "URL" (.Scratch.Get "code_css")) }}
+
+    {{ partial "async/css.html" (dict "URL" "styles.css") }}
+    
+    {{ partial "async/cssrelpreload.js.html" }}
+
+    {{ partial "inline_css.html" . }}
+
+    {{ if .Content -}}
+    {{ $urls := findRE "<img src=\"[^\"|\\\"]*\"" .Content -}}
+    {{ range $url := $urls -}}
+      {{ $url := (strings.TrimPrefix "<img src=\"" $url) -}}
+      {{ $url := strings.TrimSuffix "\"" $url -}}
+      <link rel="preload" href="{{ $url | htmlUnescape | safeHTML }}" as="image" />
+    {{ end -}}
+    {{ end -}}
+
+    {{ if (.Scratch.Get "matomo_enable") (.Scratch.Get "matomo_host") -}}
+    <script class="_iub_cs_activate-inline" type="text/{{ if $.Site.Params.iubenda.pro.prior_consent }}plain{{ else }}javascript{{ end }}">
+      var _paq = _paq || [];
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u="{{ (.Scratch.Get "matomo_host") }}/";
+        _paq.push(['setTrackerUrl', u+'piwik.php']);
+        _paq.push(['setSiteId', '{{ .Scratch.Get "matomo_site_id" }}']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+      })();
+
+    </script>
+    {{ if (.Scratch.Get "matomo_track_nojs") -}}
+    <noscript><p><img src="{{ (.Scratch.Get "matomo_host") }}/piwik.php?idsite={{ .Scratch.Get "matomo_site_id" }}&rec=1" style="border:0;" alt="" /></p></noscript>
+    {{ end -}}
+    {{- else -}}
+    <script>var _paq = undefined;</script>
+    {{- end -}}
+
+    {{- partial "favicons.html" . -}}
+  </head>
+  <body itemscope itemtype="http://schema.org/WebPage">
+    <div id="site-container">
+      <div id="site-header">
+        <a href="{{ .Site.BaseURL }}">
+          <header class="small-text-{{ if $.Site.Params.thumbnail }}left{{ else }}center{{ end }} medium-text-left row">
+            {{ with $.Site.Params.thumbnail -}}
+              <img id="site-thumbnail" class="row-item" src="{{ . | absLangURL }}">
+            {{ end -}}
+            <div class="row-item">
+              <span id="site-title" itemprop="name">{{ .Site.Title }}</span>
+              {{ with .Site.Params.tagline }}<br/><span id="site-tagline">{{ . }}</span>{{ end }}
+            </div>
+          </header>
+        </a>
+        {{ if (.Site.Menus.main) -}}
+        <label for="menu-toggle-box"><div id="menu-toggle" class="main-nav no-select"><span><span class="fas fa-bars fa-fw" aria-hidden></span> MENU</span></div></label>
+        <input type="checkbox" id="menu-toggle-box" class="hide"/>
+        <nav id="main-nav">
+          <ul class="menu">
+          {{- partial "nested_menu.html" (dict "menu" .Site.Menus.main "page" . "site" .Site) . -}}
+          </ul>
+        </nav>
+        {{ end -}}
+      </div>
+      <div id="main-container" class="row" role="main" itemprop="mainContentOfPage">
+        {{ with $.Site.Params.alert }}
+          <div class="alert small-full">
+            <p>{{ . | markdownify }}</p>
+          </div>
+        {{ end }}
+        {{ if .Site.Params.leftsidebar }}{{ partial "sidebar.html" . }}{{ end }}
+        {{ block "main_content" . }}{{ end }}
+        {{ if (not .Site.Params.leftsidebar) }}{{ partial "sidebar.html" . }}{{ end }}
+      </div>
+      <footer class="row">
+        <div class="small-full medium-third small-text-center medium-text-left medium-left row">
+          <div class="row-item small-full">
+            <small>
+              &copy; {{now.Format "2006"}}
+              <span itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+                <span itemprop="name">{{ with $.Site.Copyright }}{{ . }}{{ else }}{{ with $.Site.Author}}{{ . }}{{ else }}{{ with $.Site.Params.Author}}{{ . }}{{ else }}{{ .Site.Title }}{{ end }}{{ end }}{{ end }}.</span>
+              </span>
+            </small>
+          </div>
+          {{ if not $.Site.Params.hide_attribution -}}
+          <div class="row-item small-full">
+            <small>
+              {{ i18n "attribution" (dict "Hugo" "<a href=\"https://gohugo.io\">Hugo</a>" "BluestNight" "<a href=\"https://bluestnight.shadow53.com\">BluestNight</a>") | safeHTML }}
+            </small>
+          </div>
+          {{ end }}
+        </div>
+        <div class="small-full medium-third small-text-center medium-text-center small-right row">
+          {{ if and (.Scratch.Get "matomo_enable") (.Scratch.Get "matomo_enable_optout") -}}
+          {{- with (.Scratch.Get "matomo_host") -}}
+          <div class="small-full small-text-center row">
+            <small>
+              {{ i18n "matomoFooter" | safeHTML }}
+            </small>
+          </div>
+          {{- end -}}
+          {{- end }}
+          <div class="small-full small-text-center row">
+              {{ $iubenda := and $.Site.Params.iubenda.id (or (not $.Site.Params.iubenda.pro.enable_pro) (not $.Site.Params.iubenda.pro.disable_footer_link)) }}
+              {{ if or ($.Site.GetPage "page" "privacy-policy.md") $iubenda }}
+              <div class="row-item small-only-full">
+                {{ if $iubenda }}
+                  {{ partial "iubenda/button.html" . }}
+                {{ else }}
+                  {{ with $.Site.GetPage "page" "privacy-policy.md" }}
+                  <small>
+                    <a href="{{- ref . "privacy-policy.md" -}}">{{ i18n "privacyPolicyLabel" | title }}</a>
+                  </small>
+                  {{ end }}
+                {{ end }}
+              </div>
+              {{ end }}
+              {{ if ($.Site.GetPage "page" "terms-of-use.md") }}
+              <div class="row-item small-only-full{{ if $iubenda }} iubenda-compat{{ end }}">
+                {{ with $.Site.GetPage "page" "terms-of-use.md" -}}
+                {{ if not $iubenda }}
+                <small>
+                {{ end }}
+                  <a href="{{- ref . "terms-of-use.md" -}}">{{ i18n "termsOfUseLabel" | title }}</a>
+                {{ if not $iubenda }}
+                </small>
+                {{ end }}
+                {{ end }}
+              </div>
+              {{ end }}
+            </div>
+        </div>
+        <div id="social-icons" class="row small-full medium-third small-text-center medium-text-right">
+          {{- partial "social-icons.html" (dict "Scratch" .Scratch "Social" .Site.Params.social "IsMember" false) .Site.Params.social -}}
+        </div>
+      </footer>
+    </div>
+    {{- if $.Site.Params.widgets.search -}}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.3/lunr.min.js"></script>
+    {{ if $.Site.Params.no_minimize }}
+    <script src="{{ "js/search.js" | absLangURL }}" type="text/javascript"></script>
+    {{ else }}
+    <script src="{{ "js/search.min.js" | absLangURL }}" type="text/javascript"></script>
+    {{ end }}
+    <script type="text/javascript">
+      var lunrIndex = undefined;
+      loadIndex("{{ "index.json" | absURL }}").then(
+        function(index) { lunrIndex = index; },
+        function(status){}
+      );
+    </script>
+    {{- end -}}
+    {{- if and (.Scratch.Get "matomo_enable") (.Scratch.Get "matomo_enable_ajax") -}}
+    <script class="_iub_cs_activate-inline" type="text/{{ if $.Site.Params.iubenda.pro.prior_consent }}plain{{ else }}javascript{{ end }}">
+
+    function ajax(url) {
+      return new Promise(function(resolve, reject){
+        var req = new XMLHttpRequest();
+        req.open("GET", url, true);
+        req.withCredentials = true;
+        req.onload = function() {
+          var status = req.status;
+          if (status === 200)
+            resolve(req.response);
+          else
+            reject(status);
+        };
+        req.send(null);
+      });
+    }
+
+    function isTracked(data) {
+      var dom = (new DOMParser()).parseFromString(data, "application/xml");
+      return dom.getElementsByTagName("result")[0].innerHTML === "1"
+    }
+
+    function updateAnalyticsText() {
+      ajax('{{ (.Scratch.Get "matomo_host") | safeJS }}/index.php?module=API&method=AjaxOptOut.isTracked')
+      .then(function(data){
+        console.log("Update: " + isTracked(data));
+        document.getElementById("toggle-tracking").innerText = isTracked(data) ? "{{ i18n "optOut" | title }}" : "{{ i18n "optIn" | title }}";
+      });
+    }
+
+    function toggleHandler(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      ajax("{{ (.Scratch.Get "matomo_host") | safeJS }}/index.php?module=API&method=AjaxOptOut.isTracked")
+      .then(function(data) {
+        console.log("Toggle: " + isTracked(data));
+        ajax('{{ (.Scratch.Get "matomo_host") | safeJS }}/index.php?module=API&method=AjaxOptOut.do' + (isTracked(data) ? 'Ignore' : 'Track')).then(updateAnalyticsText);
+      });
+    }
+
+    document.getElementById("toggle-tracking").addEventListener("click", toggleHandler);
+    window.addEventListener("load", updateAnalyticsText);
+    </script>
+    {{- end -}}
+    {{- if and $.Site.Params.iubenda.pro.enable_cookie_policy (and $.Site.Params.iubenda.id $.Site.Params.iubenda.pro.site_id) -}}
+    <script type="text/javascript">
+      var _iub = _iub || [];
+      _iub.csConfiguration = {
+        cookiePolicyId: {{ $.Site.Params.iubenda.id }},
+        siteId: {{ $.Site.Params.iubenda.pro.site_id }},
+        lang: "en",
+        consentOnScroll: true
+        {{- if not $.Site.Params.iubenda.pro.prior_consent }},
+        priorConsent: false
+        {{- end }},
+        banner: {
+          slideDown: false,
+          applyStyles: false,
+          content: "<p>{{ i18n "cookie_banner" }}</p>"
+        }
+      };
+    </script>
+    <script type="text/javascript" src="https://cdn.iubenda.com/cookie_solution/iubenda_cs/core-6f17ecca6b9b620e0bbb837c5c1409ab.js" charset="UTF-8" async></script>
+    {{- end }}
+    {{ if $.Site.Params.thumbnail -}}
+      {{- if $.Site.Params.no_minimize -}}
+      <script type="text/javascript" src="{{ "js/thumbnail.js" | absLangURL | safeHTMLAttr }}"></script>
+      {{ else }}
+      <script type="text/javascript" src="{{ "js/thumbnail.min.js" | absLangURL | safeHTMLAttr }}"></script>
+      {{ end }}
+    {{- end -}}
+    {{ if (in (string .Content) "class=\"katex-container\"") }}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/contrib/auto-render.min.js"></script>
+    <script>
+    var elems = document.getElementsByClassName('katex-container');
+    for (var i = 0; i < elems.length; i++) {
+      renderMathInElement(
+        elems[i],
+        { delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]}
+      );
+    }
+    </script>
+    {{ end }}
+  </body>
+</html>

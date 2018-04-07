@@ -1,0 +1,8 @@
+{{- if .IsPage -}}
+{
+  "name": "{{ .Title }}",
+  "description": "{{ with .Params.description }}{{ (replaceRE "\n" "$1" (. | plainify)) | replaceRE "\\\\" "\\\\" | htmlEscape }}{{ else }}{{ (replaceRE "\n" "$1" (.Summary | replaceRE "\\\\" "\\\\" | plainify)) | htmlEscape }}{{ end }}",
+  "body": "{{ with .Content }}{{ (replaceRE "\n" "$1" (. | plainify)) | replaceRE "\\\\" "\\\\" | htmlEscape }}{{ end }}",
+  "url": "{{ .URL | absLangURL }}"
+}
+{{- end -}}

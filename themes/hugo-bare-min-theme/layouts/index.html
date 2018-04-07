@@ -1,0 +1,100 @@
+{{ define "main" }}
+
+{{ partial "header_image.html" . }}
+
+{{ with .Content }}
+    <h3>Content</h3>
+    {{ . }}
+{{ end }}
+
+{{ with .Resources }}
+    <hr />
+    <h3>Resources</h3>
+    <ul>
+	{{ range . }}
+	    {{ if .RelPermalink }}
+                {{ if (ge (partial "version_str2float.html" $.Hugo.Version) 0.33) }}
+	            <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+                {{ else }}
+	            <li><a href="{{ .RelPermalink }}">{{ .RelPermalink }}</a></li>
+                {{ end }}
+	    {{ else }}
+	        <li>{{ .ResourceType | title }} (no link, only embedded in page)</li>
+	    {{ end }}
+	{{ end }}
+    </ul>
+{{ end }}
+
+<!-- Have the paginator list posts, sorted by last modified date, most recent first -->
+{{ $paginator := .Paginate (.Pages.ByLastmod.Reverse) 10 }}
+
+<div class="posts">
+    <!-- http://justindunham.net/blog-bells-and-whistles-in-hugo/ -->
+    {{ range $paginator.Pages }}
+        {{ .Render "summary"}}
+    {{ end }}
+</div>
+
+<p>
+    <div class="pagination">
+        <!-- https://discourse.gohugo.io/t/solved-big-pagination-need-add/6576/8?u=kaushalmodi -->
+        {{ $window := .Site.Params.paginateWindow | default 1 }}
+        {{ if gt $paginator.TotalPages 1 }}
+            {{ $total := $paginator.TotalPages }}
+            {{ $size := add 7 (add $window $window) }}
+            {{ $cur := $paginator.PageNumber }}
+            {{ if gt $total $size }}
+                {{ if lt $cur (sub $size (add $window 1)) }}
+                    {{ $.Scratch.Set "show" (seq 1 (sub $size 2)) }}
+                {{ else if lt (sub $total $cur) (sub $size (add $window 2)) }}
+                    {{ $.Scratch.Set "show" (seq (add (sub $total $size) 3) $total) }}
+                {{ else }}
+                    {{ $.Scratch.Set "show" (seq (sub $cur $window) (add $cur $window)) }}
+                {{ end }}
+                {{ $.Scratch.Add "show" 1 }}
+                {{ $.Scratch.Add "show" $total }}
+            {{ else }}
+                {{ $.Scratch.Set "show" (seq 1 $total) }}
+            {{ end }}
+
+            <!-- https://gohugo.io/templates/pagination/#build-the-navigation -->
+            {{ range $paginator.Pagers }}
+                {{ $cur := .PageNumber }}
+                {{ if in ($.Scratch.Get "show") $cur }}
+                    <a href="{{ .URL }}">
+                        {{- if eq . $paginator -}}<b>
+                        {{- end -}}
+                        {{ .PageNumber }}
+                        {{- if eq . $paginator -}}</b>
+                        {{- end -}}
+                    </a>
+                {{ else if in (slice 2 (sub $total 1)) $cur }}
+                    <a name="">&hellip;</a>
+                {{ end }}
+            {{ end }}
+        {{ end }}
+
+        [
+        {{ if .Paginator.HasPrev }}
+            <a href="{{ .Paginator.Prev.URL }}">Newer</a>
+        {{ end }}
+        {{ if .Paginator.HasNext }}
+            <a href="{{ .Paginator.Next.URL }}">Older</a>
+        {{ end }}
+        ]
+    </div>
+</p>
+
+{{ if (eq 1 $paginator.PageNumber) }}
+    <hr />
+    <h3 id="debug">SiteInfo (Debug)</h3>
+    {{ partial "debugprint.html" .Site }}
+    <hr />
+    <h3 id="file-debug">File Object (Debug)</h3>
+    {{ partial "debugprint.html" .File }}
+    <hr />
+    <h3 id="debug-menu">Menu (Debug)</h3>
+    {{ partial "debugprint.html" .Site.Menus }}
+{{ end }}
+
+{{ end }}

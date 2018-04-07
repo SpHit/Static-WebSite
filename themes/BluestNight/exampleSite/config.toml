@@ -1,0 +1,103 @@
+baseurl = "https://bluestnight.shadow53.com"
+title = "BluestNight"
+author = "Michael Bryant"
+paginate = 10
+theme = "BluestNight"
+PygmentsCodeFences = true
+PygmentsStyle = "monokai"
+enableRobotsTXT = true
+
+[outputs]
+    home = ["HTML", "CSS", "JSON", "RSS"]
+    section = ["HTML", "RSS"]
+
+[Params]
+    tagline = "A featureful, configurable, yet sleek dark theme for Hugo."
+    description = "The official example website for the BluestNight Hugo theme. Comes with documentation." # Description of your site
+    authorbox = true
+    author = "Michael Bryant"
+    post_navigation = false
+    thumbnail = "images/thumbnail.svg"
+    #thumbnail_radius = "15%"
+
+[Params.iubenda]
+    id = "8219381"
+    legal_only = false
+
+[Params.iubenda.pro]
+    enable_pro = true
+    site_id = "908104"
+    enable_cookie_policy = true
+    disable_footer_link = true
+    prior_consent = true
+
+[Params.piwik]
+    enable = true
+    host = "https://analytics.shadow53.com"
+    site_id = 3
+    track_nojs = true
+    enable_optout = true
+    enable_ajax = true
+
+[Params.background]
+    src = "images/background_lg.png"
+    medium_src = "images/background_med.png"
+    small_src = "images/background_sm.png"
+    fit_width = false
+    tile = false
+
+[Params.widgets]
+    search = true
+    recent_articles = true
+    categories = true
+    tags = true
+    tags_counter = true
+    patreon = "shadow53"
+
+[Params.social]
+    icon_style = "square"
+    gitlab = "BluestNight/BluestNight"
+    # The following are for testing only
+    #bitbucket = "username"
+    #deviantart = "username"
+    #email = "email@domain.com"
+    #etsy = "store"
+    #facebook = "userid"
+    #flickr = "username"
+    #github = "username"
+    #gitter = "user/repo"
+    #googleplus = "+Joe-Smith"
+    #instagram = "username"
+    #linkedin = "userid"
+    #medium = "username"
+    #patreon = "username"
+    #pinterest = "username"
+    #playstation = "username"
+    #quora = "userid"
+    #reddit = "username"
+    #slack_org = "subdomain"
+    #snapchat = "username"
+    #soundcloud = "userid"
+    #spotify = "username"
+    #steam = "id/[username]"
+    #telegram = "username"
+    #tumblr = "username"
+    #twitch = "username"
+    #twitter = "username"
+    #vimeo = "userid"
+    #xbox = "username"
+    #youtube = "user/[username]"
+
+[menu]
+  [[menu.main]]
+    name = "Alert"
+    weight = 1
+    parent = "docs-pages"
+    identifier = "alert-for-pages"
+    url = "docs/site/alert/#page-specific-alerts"
+  [[menu.main]]
+    name = "Alert"
+    weight = 1
+    parent = "docs-shortcodes"
+    identifier = "alert-shortcode"
+    url = "docs/site/alert/#shortcode"
