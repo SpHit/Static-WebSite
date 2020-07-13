@@ -24,7 +24,7 @@
     "smoothscroll-polyfill": "^0.4.3"
   },
   "devDependencies": {
-    "standard-version": "^4.0.0"
+    "standard-version": "^8.0.1"
   },
   "license": "WTFPL"
 }
